@@ -21,6 +21,7 @@ class CategoryFrame(QtWidgets.QWidget):
 
         self.but_add.pressed.connect(self.add_category)
         self.but_update.pressed.connect(self.edit_category)
+        self.category_list.itemSelectionChanged.connect(self.select_category)
 
         self.update_list()
 
