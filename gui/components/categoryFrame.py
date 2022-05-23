@@ -39,7 +39,6 @@ class CategoryFrame(QtWidgets.QWidget):
         self.but_add.move(0, p_h - 60)
         self.input_name.move(0, p_h - 90)
 
-
     @QtCore.Slot()
     def add_category(self):
         if self.input_name.text():
@@ -65,4 +64,3 @@ class CategoryFrame(QtWidgets.QWidget):
             item = QListWidgetItem()
             item.setText(name)
             self.category_list.addItem(item)
-
