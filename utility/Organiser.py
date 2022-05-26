@@ -27,10 +27,16 @@ class Organiser:
             self.now_category = name
 
     def add_item_to_category(self, name):
-        if self.now_category and self.now_category in self.categories:
-            if name not in self.categories[self.now_category]:
-                self.categories[self.now_category].setdefault(name, {'text': ''})
-                write_to_file(self.categories)
+        try:
+            if name in self.categories[self.now_category]:
+                print(f'name( "{name}" ) taken')
+                return
+            self.categories[self.now_category].setdefault(name, {'text': ''})
+            write_to_file(self.categories)
+        except KeyError as e:
+            print(e)
+        except FileExistsError as e:
+            print(e)
 
     def get_items_name_in_category(self) -> List[str]:
         if self.now_category and self.now_category in self.categories:
@@ -38,24 +44,39 @@ class Organiser:
         return []
 
     def update_item_name_in_category(self, old_name, new_name):
-        if self.now_category and self.now_category in self.categories:
-            if old_name in self.categories[self.now_category]:
-                if new_name not in self.categories[self.now_category]:
-                    self.categories[self.now_category][new_name] = self.categories[self.now_category].pop(old_name)
+        try:
+            self.categories[self.now_category][new_name] = self.categories[self.now_category].pop(old_name)
+        except KeyError as e:
+            print(e)
 
     def select_item(self, name):
-        if self.now_category and self.now_category in self.categories:
+        try:
             if name in self.categories[self.now_category]:
                 self.now_item = name
+        except KeyError as e:
+            print(e)
 
-    def get_item_details(self):
-        if self.now_category and self.now_category in self.categories:
-            if self.now_item and self.now_item in self.categories[self.now_category]:
-                return self.categories[self.now_category][self.now_item]['text']
+    def get_item_details(self, item_name: '') -> str:
+        if item_name == '':
+            item_name = self.now_item
+        try:
+            return self.categories[self.now_category][item_name]['text']
+        except KeyError as e:
+            print(e)
+
         return ''
 
+    def get_selected_item_name(self):
+        return self.now_item
+
     def set_item_details(self, new_text):
-        if self.now_category and self.now_category in self.categories:
-            if self.now_item and self.now_item in self.categories[self.now_category]:
-                self.categories[self.now_category][self.now_item]['text'] = new_text
-                write_to_file(self.categories)
+        self.set_item_details_for_item(new_text, self.now_item)
+
+    def set_item_details_for_item(self, new_text, item_name):
+        try:
+            self.categories[self.now_category][item_name]['text'] = new_text
+            write_to_file(self.categories)
+        except KeyError as e:
+            print(e)
+        except FileExistsError as e:
+            print(e)

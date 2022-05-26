@@ -13,6 +13,8 @@ class NoteView(QtWidgets.QWidget):
         self.note_category_frame = CustomWidgetScrollList(self)
         self.note_item_frame = CustomWidgetScrollList(self)
         self.refresh_list()
+        self.save_button = QtWidgets.QPushButton("Save", self)
+        self.save_button.pressed.connect(self.save_notes)
         event_manager.register_event(EventName.SelectCategory, self.category_pick)
 
     def refresh_list(self):
@@ -20,6 +22,10 @@ class NoteView(QtWidgets.QWidget):
             new_item = NoteCategoryWidget()
             new_item.set_text(item)
             self.note_category_frame.add_widget(new_item)
+
+    @staticmethod
+    def save_notes():
+        event_manager.call(EventName.UpdateItem)
 
     def category_pick(self):
         self.note_item_frame.clear()
@@ -32,6 +38,12 @@ class NoteView(QtWidgets.QWidget):
         super().resizeEvent(event)
 
         frame_width = 300
+        save_button_height = 40
+
         self.note_category_frame.resize(frame_width, self.height())
-        self.note_item_frame.resize(self.width() - frame_width, self.height())
+
+        self.note_item_frame.resize(self.width() - frame_width, self.height() - save_button_height)
         self.note_item_frame.move(frame_width, 0)
+
+        self.save_button.resize(self.width() - frame_width, save_button_height)
+        self.save_button.move(frame_width, self.height() - save_button_height)
