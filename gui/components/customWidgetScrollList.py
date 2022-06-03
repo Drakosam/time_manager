@@ -3,7 +3,6 @@ from PySide6 import QtWidgets, QtCore
 
 class CustomWidgetScrollList(QtWidgets.QWidget):
 
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.list_item = []

@@ -29,7 +29,6 @@ class Organiser:
     def add_item_to_category(self, name):
         try:
             if name in self.categories[self.now_category]:
-                print(f'name( "{name}" ) taken')
                 return
             self.categories[self.now_category].setdefault(name, {'text': ''})
             write_to_file(self.categories)

@@ -10,6 +10,7 @@ class NoteItemWidget(QWidget):
         super().__init__(parent)
         self.button = QPushButton(self)
         self.size_h = 40
+        self.size_hm = self.size_h * 15
         self.setMinimumHeight(self.size_h)
         self.setMaximumHeight(self.size_h)
 
@@ -38,11 +39,10 @@ class NoteItemWidget(QWidget):
             organiser.select_item(self.item_name)
             event_manager.call(EventName.SelectItem)
             test_to_show = organiser.get_item_details(self.item_name)
-            print(test_to_show,self.item_name)
             self.text_area.setText(test_to_show)
             self.text_area.setVisible(True)
-            self.setMinimumHeight(self.size_h * 6)
-            self.setMaximumHeight(self.size_h * 6)
+            self.setMinimumHeight(self.size_hm)
+            self.setMaximumHeight(self.size_hm)
         else:
             self._close_note()
 
@@ -54,4 +54,4 @@ class NoteItemWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.button.setGeometry(0, 0, self.width(), self.size_h)
-        self.text_area.setGeometry(0, self.size_h, self.width(), self.size_h * 5)
+        self.text_area.setGeometry(0, self.size_h, self.width(), self.size_hm - self.size_h)
