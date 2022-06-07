@@ -9,8 +9,11 @@ class NoteItemWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.button = QPushButton(self)
+        self.button_update = QPushButton(self)
+        self.button_update.setText('update')
+        self.button_update.setVisible(False)
         self.size_h = 40
-        self.size_hm = self.size_h * 15
+        self.size_hm = self.size_h * 15 + 20
         self.setMinimumHeight(self.size_h)
         self.setMaximumHeight(self.size_h)
 
@@ -43,11 +46,13 @@ class NoteItemWidget(QWidget):
             self.text_area.setVisible(True)
             self.setMinimumHeight(self.size_hm)
             self.setMaximumHeight(self.size_hm)
+            self.button_update.setVisible(True)
         else:
             self._close_note()
 
     def _close_note(self):
         self.text_area.setVisible(False)
+        self.button_update.setVisible(False)
         self.setMinimumHeight(self.size_h)
         self.setMaximumHeight(self.size_h)
         organiser.set_item_details_for_item(self.text_area.toPlainText(), self.item_name)
