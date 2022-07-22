@@ -1,4 +1,5 @@
 from PySide6 import QtWidgets, QtCore
+from PySide6.QtGui import Qt
 
 
 class CustomWidgetScrollList(QtWidgets.QWidget):
@@ -14,6 +15,7 @@ class CustomWidgetScrollList(QtWidgets.QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
+        self.layout.setAlignment(Qt.AlignTop)
         self.frame.setLayout(self.layout)
         self.scroll_view.setWidget(self.frame)
 
@@ -34,3 +36,4 @@ class CustomWidgetScrollList(QtWidgets.QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.scroll_view.setGeometry(0, 0, self.width(), self.height())
+

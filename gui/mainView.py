@@ -1,13 +1,9 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import QTimer
-
 from gui.views.autoProcessView import AutoProcessView
 from gui.views.noteView import NoteView
 from gui.views.settingsView import SettingsView
 from gui.views.taskView import TaskView
-
-from utility import event_manager
-from utility.Observer import EventName
 
 
 class MainView(QtWidgets.QWidget):
@@ -26,7 +22,7 @@ class MainView(QtWidgets.QWidget):
         self.timer.start(15000)
 
     def time_out_event(self):
-        event_manager.call(EventName.UpdateItem)
+        pass
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
