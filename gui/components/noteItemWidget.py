@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QPushButton, QTextEdit
+from PySide6.QtWidgets import QWidget, QPushButton, QTextEdit, QLabel, QLineEdit
 
 from utility import organiser
 
@@ -7,64 +7,60 @@ class NoteItemWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.button = QPushButton(self)
-        self.size_h = 40
-        self.size_hm = self.size_h * 15
+        self.update_btt = QPushButton(self)
+        self.update_btt.setText('Update')
 
-        self.button_update = QPushButton(self)
-        self.button_update.setText('update')
-        self.button_update.setVisible(False)
-        self.button_update.resize(150, self.size_h)
-        self.button_update.move(0, self.size_h)
-        self.name_input = QTextEdit(self)
-        self.name_input.resize(self.size().width() - 200, self.size_h)
-        self.name_input.move(150, self.size_h)
+        self.create_btt = QPushButton(self)
+        self.create_btt.setText('Create')
 
-        self.setMinimumHeight(self.size_h)
-        self.setMaximumHeight(self.size_h)
+        self.delete_btt = QPushButton(self)
+        self.delete_btt.setText('Del')
+
+        self.label_category = QLabel(self)
+        self.label_category.setText('Category ::')
+        self.label_category.resize(60, 30)
+
+        self.label_name = QLabel(self)
+        self.label_name.setText('Name ::')
+        self.label_name.resize(60, 30)
+        self.label_name.move(0, 30)
+
+        self.input_name = QLineEdit(self)
+        self.input_name.move(60, 0)
+        self.input_category = QLineEdit(self)
+        self.input_category.move(60, 30)
 
         self.text_area = QTextEdit(self)
-        self.text_area.setVisible(False)
-        self.button.pressed.connect(self.selected_item)
-        self.item_name = ''
+        self.text_area.move(0, 60)
 
     def set_text(self, text: str) -> None:
-        self.button.setText(text)
-        self.item_name = text
+        pass
 
     def on_item_selected(self):
-        try:
-            if not self.item_name == organiser.get_selected_item_name():
-                if self.text_area.isVisible():
-                    self._close_note()
-        except Exception as e:
-            pass
+        pass
 
     def _update_item(self):
-        if self.item_name == organiser.get_selected_item_name():
-            organiser.set_item_details(self.text_area.toPlainText())
+        pass
 
-    def selected_item(self) -> None:
-        if not self.text_area.isVisible():
-            organiser.select_item(self.item_name)
-            # xxxx
-
-            test_to_show = organiser.get_item_details(self.item_name)
-            self.text_area.setText(test_to_show)
-            self.text_area.setVisible(True)
-            self.setMinimumHeight(self.size_hm)
-            self.setMaximumHeight(self.size_hm)
-            self.button_update.setVisible(True)
-        else:
-            self._close_note()
+    def selected_item(self, category, name) -> None:
+        self.input_name.setText(name)
+        self.input_category.setText(category)
+        for item in organiser.notes:
+            if item.name == name and item.category:
+                self.text_area.setText(item.text)
 
     def _close_note(self):
-        self.text_area.setVisible(False)
-        self.button_update.setVisible(False)
-        self.setMinimumHeight(self.size_h)
-        self.setMaximumHeight(self.size_h)
-        organiser.set_item_details_for_item(self.text_area.toPlainText(), self.item_name)
+        pass
 
     def resizeEvent(self, event) -> None:
-        self.button.setGeometry(0, 0, self.width(), self.size_h)
-        self.text_area.setGeometry(0, self.size_h * 2, self.width(), self.size_hm - self.size_h * 2)
+        self.update_btt.move(self.width() - 100, 0)
+        self.update_btt.resize(100, 30)
+        self.create_btt.resize(70, 30)
+        self.create_btt.move(self.width() - 100, 30)
+        self.delete_btt.resize(30, 30)
+        self.delete_btt.move(self.width() - 30, 30)
+
+        self.input_category.resize(self.width() - 160, 30)
+        self.input_name.resize(self.width() - 160, 30)
+
+        self.text_area.resize(self.width(), self.height() - 60)
