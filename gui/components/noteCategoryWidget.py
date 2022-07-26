@@ -1,6 +1,8 @@
 from functools import partial
 
 from PySide6 import QtWidgets
+from PySide6.QtGui import QFont
+
 from utility import organiser
 
 
@@ -12,6 +14,7 @@ class NoteCategoryWidget(QtWidgets.QWidget):
         self.setMaximumHeight(40)
         self.button = QtWidgets.QPushButton(self)
         self.button.pressed.connect(self.category_clicked)
+        self.button.setFont(QFont("Times", 15, QFont.Bold))
         self.button_list = []
         self.show_children = False
         self.parent_func = None

@@ -10,8 +10,11 @@ class NoteItem:
         self.category = json_data['category']
         self.text = json_data['text']
 
+    def to_dict(self):
+        return {'name': self.name, 'category': self.category, 'text': self.text}
+
     def __repr__(self):
-        return json.dumps({'name': self.name, 'category': self.category, 'text': self.text})
+        return json.dumps(self.to_dict())
 
 
 class Organiser:
@@ -20,19 +23,27 @@ class Organiser:
 
         if 'notes' not in data:
             data['notes'] = []
-            write_to_file(data)
 
         if 'task' not in data:
             data['task'] = []
-            write_to_file(data)
 
         if 'auto_task' not in data:
             data['auto_task'] = []
-            write_to_file(data)
 
         if 'settings' not in data:
             data['settings'] = {}
-            write_to_file(data)
 
         self.notes = [NoteItem(x) for x in data['notes']]
+        self.tasks = []
+        self.auto_task = []
+        self.settings = {}
+        write_to_file(data)
 
+    def save_data(self):
+        data = {
+            'notes': [x.to_dict() for x in self.notes],
+            'task': self.tasks,
+            'auto_task': self.auto_task,
+            'settings': self.settings
+        }
+        write_to_file(data)

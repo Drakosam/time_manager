@@ -12,15 +12,22 @@ class NoteView(QtWidgets.QWidget):
 
         self.category_list = CustomWidgetScrollList(self)
         self.note_area = NoteItemWidget(self)
+        self.note_area.set_parent_func(self.on_update_note)
+        self.setup_list()
 
+    def picked_item(self, cat, name):
+        self.note_area.selected_item(cat, name)
+
+    def setup_list(self):
         for cat in {x.category for x in organiser.notes}:
             item = NoteCategoryWidget()
             item.set_text(cat)
             item.register_parent_func(self.picked_item)
             self.category_list.add_widget(item)
 
-    def picked_item(self, cat, name):
-        self.note_area.selected_item(cat, name)
+    def on_update_note(self):
+        self.category_list.clear()
+        self.setup_list()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
