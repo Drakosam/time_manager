@@ -6,7 +6,7 @@ from PySide6.QtGui import QFont
 from utility import organiser
 
 
-class NoteCategoryWidget(QtWidgets.QWidget):
+class CategoryWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         self.category_name = ''
         super().__init__(parent)
@@ -22,11 +22,11 @@ class NoteCategoryWidget(QtWidgets.QWidget):
     def register_parent_func(self, func):
         self.parent_func = func
 
-    def set_text(self, text: str) -> None:
+    def set_item(self, text: str, source) -> None:
         self.category_name = text
         self.button.setText(self.category_name)
         self.category_name = self.category_name
-        for item in organiser.notes:
+        for item in source:
             if item.category == self.category_name:
                 butt = QtWidgets.QPushButton(self)
                 butt.setText(item.name)

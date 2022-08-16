@@ -1,20 +1,5 @@
-import json
-from typing import List
-
+from models.note_item import NoteItem
 from utility.FileManager import read_from_file, write_to_file
-
-
-class NoteItem:
-    def __init__(self, json_data):
-        self.name = json_data['name']
-        self.category = json_data['category']
-        self.text = json_data['text']
-
-    def to_dict(self):
-        return {'name': self.name, 'category': self.category, 'text': self.text}
-
-    def __repr__(self):
-        return json.dumps(self.to_dict())
 
 
 class Organiser:

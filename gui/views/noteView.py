@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets
 
 from gui.components.customWidgetScrollList import CustomWidgetScrollList
-from gui.components.noteCategoryWidget import NoteCategoryWidget
+from gui.components.categoryWidget import CategoryWidget
 from gui.components.noteItemWidget import NoteItemWidget
 from utility import organiser
 
@@ -20,8 +20,8 @@ class NoteView(QtWidgets.QWidget):
 
     def setup_list(self):
         for cat in {x.category for x in organiser.notes}:
-            item = NoteCategoryWidget()
-            item.set_text(cat)
+            item = CategoryWidget()
+            item.set_item(cat, organiser.notes)
             item.register_parent_func(self.picked_item)
             self.category_list.add_widget(item)
 

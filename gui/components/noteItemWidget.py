@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QPushButton, QTextEdit, QLabel, QLineEdit
 
+from models.note_item import NoteItem
 from utility import organiser
-from utility.Organiser import NoteItem
 
 
 class NoteItemWidget(QWidget):
