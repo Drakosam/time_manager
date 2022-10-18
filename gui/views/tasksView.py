@@ -9,7 +9,6 @@ class TaskView(QtWidgets.QWidget):
         self.category_list = CustomWidgetScrollList(self)
         self.new_task = TaskWidget(self)
 
-
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.category_list.resize(300, self.height())

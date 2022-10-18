@@ -1,4 +1,9 @@
-from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QTextEdit
+import uuid
+
+from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QTextEdit
+
+from models.task_item import TaskItem
+from utility import organiser
 
 
 class TaskWidget(QWidget):
@@ -7,6 +12,8 @@ class TaskWidget(QWidget):
         # fields
         self.task_name = ''
         self.task_description = ''
+        self.task_id = uuid.uuid4()
+        self.is_new_task = True
 
         # objects
         self.name_field = QLineEdit(self)
@@ -17,17 +24,24 @@ class TaskWidget(QWidget):
 
     def create_task_action(self):
         if self.name_field.text():
-            print(self.name_field.text(), 'created')
+            self.save_task()
+            self.name_field.setText('')
+            self.description_area.setText('')
+            if self.is_new_task:
+                self.task_id = uuid.uuid4()
 
     def save_task(self):
-        return str({
+        organiser.update_task({
             'name': self.name_field.text(),
-            'description': self.description_area.toPlainText()
+            'description': self.description_area.toPlainText(),
+            'id': str(self.task_id)
         })
 
-    def load_task(self, task):
-        self.name_field.setText(task['name'])
-        self.description_area.setText(task['description'])
+    def load_task(self, task: TaskItem):
+        self.name_field.setText(task.name)
+        self.description_area.setText(task.description)
+        self.task_id = task.id
+        self.is_new_task = False
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
