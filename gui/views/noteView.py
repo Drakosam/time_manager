@@ -15,8 +15,8 @@ class NoteView(QtWidgets.QWidget):
         self.note_area.set_parent_func(self.on_update_note)
         self.setup_list()
 
-    def picked_item(self, cat, name):
-        self.note_area.selected_item(cat, name)
+    def picked_item(self, note_item):
+        self.note_area.selected_item(note_item)
 
     def setup_list(self):
         for cat in {x.category for x in organiser.notes}:

@@ -1,14 +1,16 @@
-import json
+from models.base_item import BaseItem
 
 
-class NoteItem:
+class NoteItem(BaseItem):
     def __init__(self, json_data):
-        self.name = json_data['name']
-        self.category = json_data['category']
         self.text = json_data['text']
+        super().__init__(json_data)
 
     def to_dict(self):
-        return {'name': self.name, 'category': self.category, 'text': self.text}
+        r_data = super().to_dict()
+        r_data['text'] = self.text
+        return r_data
 
-    def __repr__(self):
-        return json.dumps(self.to_dict())
+    def update(self, json_data):
+        super().update(json_data)
+        self.text = json_data['text']

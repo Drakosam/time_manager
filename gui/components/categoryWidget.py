@@ -3,8 +3,6 @@ from functools import partial
 from PySide6 import QtWidgets
 from PySide6.QtGui import QFont
 
-from utility import organiser
-
 
 class CategoryWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -30,7 +28,7 @@ class CategoryWidget(QtWidgets.QWidget):
             if item.category == self.category_name:
                 butt = QtWidgets.QPushButton(self)
                 butt.setText(item.name)
-                butt.pressed.connect(partial(self.call_item, item.name))
+                butt.pressed.connect(partial(self.call_item, item))
                 self.button_list.append(butt)
         for index, butt in enumerate(self.button_list):
             butt.setGeometry(0, 40 + (40 * index), self.width(), 40)
@@ -49,9 +47,9 @@ class CategoryWidget(QtWidgets.QWidget):
             for index, butt in enumerate(self.button_list):
                 butt.setGeometry(20, 40 + (40 * index), self.width() - 20, 40)
 
-    def call_item(self, value):
+    def call_item(self, item):
         if self.parent_func:
-            self.parent_func(self.category_name, value)
+            self.parent_func(item)
 
     def resizeEvent(self, event) -> None:
         self.button.setGeometry(0, 0, self.width(), 40)

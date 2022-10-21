@@ -7,10 +7,8 @@ from utility import organiser
 class NoteItemWidget(QWidget):
 
     def __init__(self, parent=None):
+        self.note_id = ''
         super().__init__(parent)
-
-        self.category = ""
-        self.name = ""
 
         self.update_btt = QPushButton(self)
         self.update_btt.setText('Update')
@@ -34,61 +32,49 @@ class NoteItemWidget(QWidget):
         self.label_name.move(0, 30)
 
         self.input_name = QLineEdit(self)
-        self.input_name.move(70, 0)
+        self.input_name.move(70, 30)
         self.input_category = QLineEdit(self)
-        self.input_category.move(70, 30)
+        self.input_category.move(70, 0)
 
         self.text_area = QTextEdit(self)
         self.text_area.move(0, 60)
 
-        self.parent_func = lambda: print('parent_func is empty')
-
-    def _update_item(self, is_auto_update=False):
-        if self.category and self.name:
-            for item in organiser.notes:
-                if item.name == self.name and item.category == self.category:
-                    item.text = self.text_area.toPlainText()
-                    if not is_auto_update:
-                        item.name = self.input_name.text()
-                        item.category = self.input_category.text()
-
-        if not is_auto_update:
-            self.parent_func()
-            organiser.save_data()
+    def _update_item(self):
+        print(self.note_id)
+        item = NoteItem({
+            'id': self.note_id,
+            'name': self.input_name.text(),
+            'category': self.input_category.text(),
+            'text': self.text_area.toPlainText()
+        })
+        organiser.update_notes(item)
+        self.selected_item(item)
+        self.parent_func()
+        organiser.save_data()
 
     def _create_item(self):
-        self.category = self.input_category.text()
-        self.name = self.input_name.text()
-        text = self.text_area.toPlainText()
         item = NoteItem({
-            'name': self.name,
-            'category': self.category,
-            'text': text
+            'name': self.input_name.text(),
+            'category': self.input_category.text(),
+            'text': self.text_area.toPlainText()
         })
-        organiser.notes.append(item)
-        self.selected_item(item.category, item.name)
+        organiser.update_notes(item)
+        self.selected_item(item)
         self.parent_func()
         organiser.save_data()
 
     def _delete_item(self):
-        for item in organiser.notes:
-            if item.name == self.name and item.category == self.category:
-                organiser.notes.remove(item)
+        organiser.delete_note(self.note_id)
         self.parent_func()
-        organiser.save_data()
 
     def set_parent_func(self, parent_func):
         self.parent_func = parent_func
 
-    def selected_item(self, category, name) -> None:
-        self._update_item(True)
-        self.input_name.setText(name)
-        self.input_category.setText(category)
-        self.category = category
-        self.name = name
-        for item in organiser.notes:
-            if item.name == self.name and item.category == self.category:
-                self.text_area.setText(item.text)
+    def selected_item(self, note_item: NoteItem) -> None:
+        self.note_id = note_item.id
+        self.input_name.setText(note_item.name)
+        self.input_category.setText(note_item.category)
+        self.text_area.setText(note_item.text)
 
     def resizeEvent(self, event) -> None:
         self.update_btt.move(self.width() - 100, 0)

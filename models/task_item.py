@@ -1,15 +1,16 @@
-class TaskItem:
-    def __init__(self, json_data):
-        self.name = ''
-        self.description = ''
-        self.id = ''
+from models.base_item import BaseItem
 
-        self.update(json_data)
+
+class TaskItem(BaseItem):
+    def __init__(self, json_data):
+        self.description = json_data['description']
+        super().__init__(json_data)
 
     def to_dict(self):
-        return {'name': self.name, 'description': self.description, 'id': self.id}
+        r_data = super().to_dict()
+        r_data['description'] = self.description
+        return r_data
 
     def update(self, json_data):
-        self.name = json_data['name']
+        super().update(json_data)
         self.description = json_data['description']
-        self.id = json_data['id']
