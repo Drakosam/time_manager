@@ -64,7 +64,8 @@ class NoteItemWidget(QWidget):
         organiser.save_data()
 
     def _delete_item(self):
-        organiser.delete_note(self.note_id)
+        print(self.note_id)
+        organiser.delete_notes(self.note_id)
         self.parent_func()
 
     def set_parent_func(self, parent_func):
