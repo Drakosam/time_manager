@@ -1,19 +1,20 @@
 import uuid
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QTextEdit
+from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QTextEdit, QComboBox
 
 from models.task_item import TaskItem
 from utility import organiser
 
 
 class TaskWidget(QWidget):
-
     updateTask = QtCore.Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         # fields
         self.show_task = None
+        self.selected_category = 'manual'
 
         # objects
         self.name_field = QLineEdit(self)
@@ -29,7 +30,14 @@ class TaskWidget(QWidget):
         self.delete_task.setText('Delete Task')
         self.delete_task.clicked.connect(self.delete_task_action)
 
+        self.pick_task_category = QComboBox(self)
+        self.pick_task_category.addItems(['manual', 'semi-auto', 'auto'])
+        self.pick_task_category.currentTextChanged.connect(self.update_selected_category)
+
         self.description_area = QTextEdit(self)
+
+    def update_selected_category(self, text):
+        self.selected_category = text
 
     def update_task_action(self):
         if self.show_task:
@@ -48,17 +56,10 @@ class TaskWidget(QWidget):
             new_task = TaskItem({
                 'name': self.name_field.text(),
                 'description': self.description_area.toPlainText(),
-                'category': 'manual',
+                'category': self.selected_category,
             })
             organiser.update_task(new_task)
             self.updateTask.emit()
-
-    def save_task(self):
-        organiser.update_task({
-            'name': self.name_field.text(),
-            'description': self.description_area.toPlainText(),
-            'id': str(self.task_id)
-        })
 
     def load_task(self, task: TaskItem):
         self.show_task = task
@@ -72,11 +73,14 @@ class TaskWidget(QWidget):
         self.create_task.resize(90, 30)
         self.create_task.move(0, self.height() - 30)
 
-        self.update_task.resize(self.width()- 90*2, 30)
+        self.update_task.resize(self.width() - 90 * 2, 30)
         self.update_task.move(90, self.height() - 30)
 
         self.delete_task.resize(90, 30)
         self.delete_task.move(self.width() - 90, self.height() - 30)
 
-        self.description_area.resize(self.width(), self.height() - 60)
-        self.description_area.move(0, 30)
+        self.pick_task_category.resize(self.width(), 30)
+        self.pick_task_category.move(0, 30)
+
+        self.description_area.resize(self.width(), self.height() - 90)
+        self.description_area.move(0, 60)
