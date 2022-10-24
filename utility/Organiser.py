@@ -14,6 +14,7 @@ class Organiser:
 
         if 'tasks' not in data:
             data['tasks'] = []
+
         if 'settings' not in data:
             data['settings'] = {}
 
@@ -48,7 +49,6 @@ class Organiser:
 
     def update_task(self, task: TaskItem):
         task_temp = [x for x in self.tasks if x.id == task.id]
-        print(task.to_dict())
         if task_temp:
             task_temp[0].update(task.to_dict())
         else:
